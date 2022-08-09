@@ -1,6 +1,13 @@
 import { Exclude } from 'class-transformer';
-import { BaseEntity, BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  DeleteDateColumn,
+  Entity,
+} from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { BaseEntity } from '../../common/entity/base.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -12,9 +19,12 @@ export class User extends BaseEntity {
   @Column({
     unique: true,
     nullable: false,
-    primary: true,
   })
   email: string;
+
+  @DeleteDateColumn()
+  @Exclude()
+  deletedAt?: Date;
 
   @Column()
   @Exclude()

@@ -13,8 +13,21 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    if (createUserDto.password !== createUserDto.confirmedPassword) {
+      throw new BadRequestException(ExceptionMessages.PASSWORDS_MISMATCH);
+    }
+
+    const existingUser = await this.usersRepository.findOne({
+      where: { email: createUserDto.email },
+    });
+
+    if (existingUser) {
+      throw new BadRequestException(ExceptionMessages.EMAIL_ALREADY_EXISTS);
+    }
+
+    const user = this.usersRepository.create(createUserDto);
+    return this.usersRepository.save(user);
   }
 
   findAll() {

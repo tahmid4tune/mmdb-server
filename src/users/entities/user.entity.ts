@@ -23,6 +23,7 @@ export class User extends BaseEntity {
   email: string;
 
   @DeleteDateColumn()
+  @Exclude()
   deletedAt?: Date;
 
   @Column()

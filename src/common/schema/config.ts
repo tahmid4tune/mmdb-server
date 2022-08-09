@@ -8,6 +8,7 @@ export const configValidationSchema = Joi.object({
   MYSQL_HOST: Joi.string().default('127.0.0.1'),
   MYSQL_PORT: Joi.number().default(3307),
   STAGE: Joi.string().default('development'),
+  PORT: Joi.number().required(),
   JWT_SECRET: Joi.string().required(),
   REFRESH_JWT_SECRET: Joi.string().required(),
   TOKEN_EXPIRATION_PERIOD: Joi.number().required(),

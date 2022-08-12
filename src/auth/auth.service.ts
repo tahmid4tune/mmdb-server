@@ -58,8 +58,8 @@ export class AuthService {
       ),
     };
     return {
-      access_token: await this.getAccessToken(payload),
-      refresh_token: await this.getRefreshToken({
+      accessToken: await this.getAccessToken(payload),
+      refreshToken: await this.getRefreshToken({
         ...payload,
         exp: Number(
           iat + this.configService.get('REFRESH_TOKEN_EXPIRATION_PERIOD'),

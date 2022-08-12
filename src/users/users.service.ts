@@ -14,7 +14,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    if (createUserDto.password !== createUserDto.confirmedPassword) {
+    if (createUserDto.password !== createUserDto.confirmPassword) {
       throw new BadRequestException(ExceptionMessages.PASSWORDS_MISMATCH);
     }
 

@@ -20,12 +20,14 @@ export class SearchMoviesDto extends PaginationDto {
   @IsOptional()
   readonly releaseYear: number;
 
+  @ApiProperty({ description: 'Max movie rating for search' })
   @IsOptional()
   @IsNumber()
   @Max(5, { message: ExceptionMessages.MOVIE_RATING_ERROR })
   @Min(1, { message: ExceptionMessages.MOVIE_RATING_ERROR })
   readonly maxRating: number;
 
+  @ApiProperty({ description: 'Min movie rating for search' })
   @IsOptional()
   @IsNumber()
   @Max(5, { message: ExceptionMessages.MOVIE_RATING_ERROR })
@@ -36,5 +38,5 @@ export class SearchMoviesDto extends PaginationDto {
   readonly sortByProperty: string;
 
   @IsOptional()
-  readonly order: string = 'DESC';
+  readonly order: string;
 }

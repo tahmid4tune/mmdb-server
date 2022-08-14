@@ -10,5 +10,6 @@ import { RatingsModule } from '../ratings/ratings.module';
   imports: [TypeOrmModule.forFeature([Movie, Rating]), RatingsModule],
   controllers: [MoviesController],
   providers: [MoviesService],
+  exports: [MoviesService],
 })
 export class MoviesModule {}

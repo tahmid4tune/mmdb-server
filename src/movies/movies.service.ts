@@ -31,7 +31,7 @@ export class MoviesService {
     const movieEntity = await this.moviesRepository.save(movie);
     let rating: Rating = null;
     if (createMovieDto.rating) {
-      rating = await this.ratingService.create({
+      rating = await this.ratingService.recordRating({
         movieId: movieEntity.id,
         userId: user.id,
         rating: createMovieDto.rating,
@@ -89,6 +89,29 @@ export class MoviesService {
       user,
     );
     await this.moviesRepository.softDelete(id);
+  }
+
+  async updateAverageRating(
+    id: number,
+    userGivenRating: number,
+    totalRatings: number,
+    previousRating: number = null,
+  ) {
+    const movie = await this.findMovieById(id);
+    if (previousRating) {
+      // user updates own rating for same movie
+      movie.averageRating =
+        (movie.averageRating * totalRatings -
+          previousRating +
+          userGivenRating) /
+        totalRatings;
+    } else {
+      // user adds rating for new movie
+      movie.averageRating =
+        (movie.averageRating * (totalRatings - 1) + userGivenRating) /
+        totalRatings;
+    }
+    return await this.moviesRepository.save(movie);
   }
 
   async findMovieById(id: number, relations: string[] = null) {

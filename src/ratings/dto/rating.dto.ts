@@ -1,7 +1,7 @@
 import { IsNumber, Max, Min } from 'class-validator';
 import ExceptionMessages from '../../common/enums/exceptions.enum';
 
-export class CreateRatingDto {
+export class RatingDto {
   @IsNumber()
   movieId: number;
 

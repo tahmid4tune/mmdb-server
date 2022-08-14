@@ -10,7 +10,7 @@ import {
 import ExceptionMessages from '../../common/enums/exceptions.enum';
 
 export class CreateUserDto {
-  @ApiProperty()
+  @ApiProperty({ description: 'User name' })
   @MaxLength(20, { message: ExceptionMessages.NAME_LENGTH_ERROR })
   readonly name: string;
 

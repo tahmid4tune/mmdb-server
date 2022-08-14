@@ -11,6 +11,9 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from '../auth/decorators/public.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { User } from './entities/user.entity';
+import { EntityDeletionResponse } from '../common/interfaces/entity-deletion-response';
 
 @Controller({ path: 'users', version: '1' })
 export class UsersController {
@@ -27,9 +30,9 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  @Get('own-info')
+  findOne(@CurrentUser() user: User) {
+    return this.usersService.findOne(user);
   }
 
   @Patch(':id')
@@ -37,8 +40,11 @@ export class UsersController {
     return this.usersService.update(+id, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Delete()
+  async removeOwnUser(
+    @CurrentUser() user: User,
+  ): Promise<EntityDeletionResponse> {
+    await this.usersService.remove(user);
+    return { message: 'User deleted successfully' };
   }
 }

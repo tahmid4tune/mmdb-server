@@ -7,6 +7,7 @@ import {
   MoreThanOrEqual,
   FindOptionsOrderValue,
   FindOptionsOrder,
+  Between,
 } from 'typeorm';
 import { PaginatedSearchResponseDto } from '../common/dto/Search-response.dto';
 import ExceptionMessages from '../common/enums/exceptions.enum';
@@ -57,12 +58,21 @@ export class MoviesService {
           ...(searchMovieDto.releaseYear && {
             releaseYear: searchMovieDto.releaseYear,
           }),
-          ...(searchMovieDto.maxRating && {
-            averageRating: LessThanOrEqual(searchMovieDto.maxRating),
-          }),
-          ...(searchMovieDto.minRating && {
-            averageRating: MoreThanOrEqual(searchMovieDto.minRating),
-          }),
+          ...(searchMovieDto.minRating &&
+            !searchMovieDto.maxRating && {
+              averageRating: MoreThanOrEqual(searchMovieDto.minRating),
+            }),
+          ...(searchMovieDto.maxRating &&
+            !searchMovieDto.minRating && {
+              averageRating: LessThanOrEqual(searchMovieDto.maxRating),
+            }),
+          ...(searchMovieDto.maxRating &&
+            searchMovieDto.minRating && {
+              averageRating: Between(
+                searchMovieDto.minRating,
+                searchMovieDto.maxRating,
+              ),
+            }),
         },
         order: this.getSortCriteria(
           searchMovieDto.sortByProperty,
@@ -141,6 +151,8 @@ export class MoviesService {
         return { name: order };
       case 'releaseYear':
         return { releaseYear: order };
+      case 'averageRating':
+        return { averageRating: order };
       default:
         return { name: order };
     }

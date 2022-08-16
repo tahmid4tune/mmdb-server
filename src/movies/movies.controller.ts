@@ -48,8 +48,7 @@ export class MoviesController {
     return { message: 'Movie deleted successfully' };
   }
 
-  @Get('search')
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @Post('search')
   async search(@Body() searchMovieDto: SearchMoviesDto) {
     return await this.moviesService.search(searchMovieDto);
   }

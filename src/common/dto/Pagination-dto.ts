@@ -1,9 +1,9 @@
-import { IsOptional } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator';
 
 export class PaginationDto {
-  @IsOptional()
-  readonly perPage: number = 10;
+  @IsNumber()
+  readonly perPage: number;
 
-  @IsOptional()
-  readonly page: number = 1;
+  @IsNumber()
+  readonly page: number;
 }

@@ -1,5 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import {
   Repository,
   Like,
@@ -15,6 +20,7 @@ import { Rating } from '../ratings/entities/rating.entity';
 import { RatingsService } from '../ratings/ratings.service';
 import { User } from '../users/entities/user.entity';
 import { CreateMovieDto } from './dto/create-movie.dto';
+import { MovieDetailResponse } from './dto/movie-detail-response.dto';
 import { SearchMoviesDto } from './dto/search-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
@@ -41,6 +47,35 @@ export class MoviesService {
       return await this.moviesRepository.save(movieEntity);
     }
     return movieEntity;
+  }
+
+  async getMovieDetail(id: number, user: User): Promise<MovieDetailResponse> {
+    const movie = await this.moviesRepository.findOne({
+      where: { id },
+      relations: ['addedBy'],
+      withDeleted: false,
+    });
+    if (!movie) {
+      throw new NotFoundException(ExceptionMessages.MOVIE_NOT_FOUND);
+    }
+    let movieDetailResponse = {};
+    if (movie.addedBy.id == user.id) {
+      movieDetailResponse = {
+        ...movie,
+        ...{ editOption: true, deleteOption: true },
+      };
+    }
+    const ratingByUser = await this.ratingService.findMovieRatingByUser(
+      movie.id,
+      user.id,
+    );
+    if (ratingByUser) {
+      movieDetailResponse = {
+        ...movieDetailResponse,
+        ...{ ratingByUser: ratingByUser.rating },
+      };
+    }
+    return plainToInstance(MovieDetailResponse, movieDetailResponse);
   }
 
   async search(

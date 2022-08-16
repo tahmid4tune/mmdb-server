@@ -59,6 +59,10 @@ export class RatingsService {
     return `This action returns all ratings`;
   }
 
+  async findMovieRatingByUser(movieId: number, userId: number) {
+    return await this.ratingRepository.findOne({ where: { movieId, userId } });
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} rating`;
   }

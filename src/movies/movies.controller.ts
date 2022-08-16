@@ -30,6 +30,14 @@ export class MoviesController {
     return await this.moviesService.create(createMovieDto, user);
   }
 
+  @Get(':id')
+  async getMovieDetail(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: User,
+  ) {
+    return await this.moviesService.getMovieDetail(id, user);
+  }
+
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,

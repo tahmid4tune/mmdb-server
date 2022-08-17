@@ -25,34 +25,34 @@ export class RatingsService {
     ratingDto: RatingDto,
     user: User,
   ): Promise<UpdateRatingResponseDto> {
-    const movieRating = await this.ratingRepository.findOne({
-      where: { movieId: ratingDto.movieId, userId: user.id },
-    });
-    let totalRatings = 0;
-    let previousRating: number = null;
-    if (!movieRating) {
+    const movieRatingByCurrentUser = await this.findMovieRatingByUser(
+      ratingDto.movieId,
+      user.id,
+    );
+    if (!movieRatingByCurrentUser) {
       await this.recordRating(ratingDto);
-      totalRatings = 1;
     } else {
-      previousRating = movieRating.rating;
-      movieRating.rating = ratingDto.rating;
-      await this.ratingRepository.save(movieRating);
-      totalRatings = await this.ratingRepository.count({
-        where: { movieId: ratingDto.movieId },
-      });
+      movieRatingByCurrentUser.rating = ratingDto.rating;
+      await this.ratingRepository.save(movieRatingByCurrentUser);
     }
-
     const movie = await this.movieService.updateAverageRating(
       ratingDto.movieId,
-      ratingDto.rating,
-      totalRatings,
-      previousRating,
+      await this.getAverageMovieRating(ratingDto.movieId),
     );
     return {
       userRating: ratingDto.rating,
       averageRating: movie.averageRating,
       movieId: movie.id,
     };
+  }
+
+  async getAverageMovieRating(movieId: number): Promise<number> {
+    const avgRating = await this.ratingRepository
+      .createQueryBuilder('movie_user_ratings')
+      .select('AVG(movie_user_ratings.rating)', 'averageRating')
+      .where('movie_user_ratings.movieId = :movieId', { movieId })
+      .getRawOne();
+    return avgRating.averageRating;
   }
 
   async findMovieRatingByUser(movieId: number, userId: number) {

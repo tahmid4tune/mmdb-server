@@ -136,26 +136,9 @@ export class MoviesService {
     await this.moviesRepository.softDelete(id);
   }
 
-  async updateAverageRating(
-    id: number,
-    userGivenRating: number,
-    totalRatings: number,
-    previousRating: number = null,
-  ) {
+  async updateAverageRating(id: number, averageRating: number) {
     const movie = await this.findMovieById(id);
-    if (previousRating) {
-      // user updates own rating for same movie
-      movie.averageRating =
-        (movie.averageRating * totalRatings -
-          previousRating +
-          userGivenRating) /
-        totalRatings;
-    } else {
-      // user adds rating for new movie
-      movie.averageRating =
-        (movie.averageRating * (totalRatings - 1) + userGivenRating) /
-        totalRatings;
-    }
+    movie.averageRating = averageRating;
     return await this.moviesRepository.save(movie);
   }
 

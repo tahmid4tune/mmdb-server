@@ -58,7 +58,7 @@ export class MoviesService {
     if (!movie) {
       throw new NotFoundException(ExceptionMessages.MOVIE_NOT_FOUND);
     }
-    let movieDetailResponse = {};
+    let movieDetailResponse = { ...movie };
     if (movie.addedBy.id == user.id) {
       movieDetailResponse = {
         ...movie,

@@ -27,7 +27,7 @@ export class Movie extends BaseEntity {
   })
   releaseYear: number;
 
-  @Column({ default: 0 })
+  @Column({ default: 0, type: 'decimal', precision: 2, scale: 1 })
   averageRating: number;
 
   @DeleteDateColumn()

@@ -14,7 +14,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    if (createUserDto.password !== createUserDto.confirmedPassword) {
+    if (createUserDto.password !== createUserDto.confirmPassword) {
       throw new BadRequestException(ExceptionMessages.PASSWORDS_MISMATCH);
     }
 
@@ -34,16 +34,22 @@ export class UsersService {
     return `This action returns all users`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(currentUser: User) {
+    const user = await this.usersRepository.findOne({
+      where: { id: currentUser.id },
+    });
+    if (!user) {
+      throw new BadRequestException(ExceptionMessages.USER_NOT_FOUND);
+    }
+    return user;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(user: User) {
+    await this.usersRepository.softDelete(user.id);
   }
 
   async findOneByEmail(email: string) {

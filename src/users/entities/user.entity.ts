@@ -5,9 +5,11 @@ import {
   Column,
   DeleteDateColumn,
   Entity,
+  OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { BaseEntity } from '../../common/entity/base.entity';
+import { Movie } from '../../movies/entities/movie.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -38,4 +40,7 @@ export class User extends BaseEntity {
     }
     this.password = await bcrypt.hash(this.password, 10);
   }
+
+  @OneToMany(() => Movie, (movie) => movie.addedBy)
+  movie: Movie[];
 }

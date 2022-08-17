@@ -8,6 +8,8 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { configValidationSchema } from './common/schema/config';
 import { UsersModule } from './users/users.module';
+import { MoviesModule } from './movies/movies.module';
+import { RatingsModule } from './ratings/ratings.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { UsersModule } from './users/users.module';
         }),
     }),
     AuthModule,
+    MoviesModule,
+    RatingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

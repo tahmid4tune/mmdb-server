@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import ExceptionMessages from '../common/enums/exceptions.enum';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -30,10 +29,6 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  findAll() {
-    return `This action returns all users`;
-  }
-
   async findOne(currentUser: User) {
     const user = await this.usersRepository.findOne({
       where: { id: currentUser.id },
@@ -42,10 +37,6 @@ export class UsersService {
       throw new BadRequestException(ExceptionMessages.USER_NOT_FOUND);
     }
     return user;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
   }
 
   async remove(user: User) {

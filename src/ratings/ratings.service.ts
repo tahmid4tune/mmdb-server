@@ -55,23 +55,7 @@ export class RatingsService {
     };
   }
 
-  findAll() {
-    return `This action returns all ratings`;
-  }
-
   async findMovieRatingByUser(movieId: number, userId: number) {
     return await this.ratingRepository.findOne({ where: { movieId, userId } });
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} rating`;
-  }
-
-  update(id: number, updateRatingDto: UpdateRatingDto) {
-    return `This action updates a #${id} rating`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} rating`;
   }
 }

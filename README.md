@@ -30,7 +30,7 @@ CONTAINER ID   IMAGE       COMMAND                  CREATED      STATUS       PO
 ```
 yarn install
 ```
-- Now copy ```.env.example``` file and paste all or it's content into a newly created one named: ```env``` file
+- Now copy ```.env.example``` file and paste all of it's content into a newly created one named: ```.env``` file
 - Run the application by following command:
 ```
 yarn dev

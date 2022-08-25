@@ -5,7 +5,6 @@ import { MoviesService } from '../movies/movies.service';
 import { User } from '../users/entities/user.entity';
 import { RatingDto } from './dto/rating.dto';
 import { UpdateRatingResponseDto } from './dto/update-rating-response.dto';
-import { UpdateRatingDto } from './dto/update-rating.dto';
 import { Rating } from './entities/rating.entity';
 
 @Injectable()
